@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="container mt-5">
+		<div class="row d-flex flex-column border border-dark pt-5 pb-5">
+			<h1 class="text-center">Categorie</h1>
+			<div class="col d-flex align-items-center justify-content-center my-3">
+				<a class="btn btn-secondary me-3" href="/">Torna alla home</a>
+				<a class="btn btn-primary" th:href="@{/categorie/create}">Aggiungi nuova categoria</a>
+			</div>
+			<div class="col mt-3 text-center">
+				<table class="table">
+				  <thead>
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col">Nome</th>
+				      <th scope="col">Azioni</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr th:each="categoria : ${categorie}" th:object="${categoria}">
+				      <th>[[ *{id} ]]</th>
+				      <td>[[ *{nome} ]]</td>
+				      <td>
+					    <a th:href="@{/categorie/edit/{id} (id=*{id})}" class="btn btn-square btn-warning">
+					    	<i class="fa-solid fa-pen-to-square"></i>
+				    	</a>
+					    <a th:href="@{/categorie/delete/{id} (id=*{id})}" class="btn btn-square btn-danger">
+					    	<i class="fa-solid fa-trash"></i>
+				    	</a>
+				      </td>
+				    </tr>
+				  </tbody>
+				</table>
+			</div>
+			<h2 th:if="${categorie.isEmpty()}">Non sono presenti categorie</h2>
+		</div>
+	</div>
+</body>
+</html>

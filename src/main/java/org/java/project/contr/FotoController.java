@@ -3,11 +3,15 @@ package org.java.project.contr;
 import java.util.List;
 import java.util.Optional;
 
+import org.java.project.auth.pojo.User;
+import org.java.project.auth.serv.UserService;
 import org.java.project.pojo.Categoria;
 import org.java.project.pojo.Foto;
 import org.java.project.serv.CategoriaService;
 import org.java.project.serv.FotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,12 +31,28 @@ public class FotoController {
 	@Autowired
 	private CategoriaService categoriaService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping("/")
 	public String getFoto(Model model) {
 		
-		List<Foto> fotoList = fotoService.findAll();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        
+        Optional<User> optUser = userService.findByUsername(userName);
+		User user = optUser.get();
 		
-		model.addAttribute("fotoList", fotoList);
+		if(authentication.getAuthorities().stream()
+	            .anyMatch(role -> role.getAuthority().equals("ADMIN"))) {
+			List<Foto> fotoList = user.getFoto();
+	    	model.addAttribute("fotoList", fotoList);
+		}
+		else {
+			List<Foto> fotoList = fotoService.findAll();
+			model.addAttribute("fotoList", fotoList);
+			
+		}
 		
 		return "foto-index";
 	}
@@ -75,6 +95,10 @@ public class FotoController {
 	public String storeFoto(Model model, @Valid @ModelAttribute Foto foto,
 			BindingResult bindingResult) {
 		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String userName = authentication.getName();
+		User user = userService.findByUsername(userName).get();
+		
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("foto", foto);
 			model.addAttribute("errors", bindingResult);
@@ -83,6 +107,8 @@ public class FotoController {
 			
 			return "foto-create";
 		}
+		
+		foto.setUser(user);
 		
 		fotoService.save(foto);
 		
@@ -98,8 +124,11 @@ public class FotoController {
 		
 		List<Categoria> categorie = categoriaService.findAll();
 		
+		List<User> users = userService.findAll();
+		
 		model.addAttribute("foto", foto);
 		model.addAttribute("categorie", categorie);
+		model.addAttribute("users", users);
 		
 		return "foto-edit";
 	}
@@ -115,6 +144,8 @@ public class FotoController {
 			model.addAttribute("errors", bindingResult);
 			List<Categoria> categorie = categoriaService.findAll();
 			model.addAttribute("categorie", categorie);
+			List<User> users = userService.findAll();
+			model.addAttribute("users", users);
 			
 			return "foto-edit";
 		}
@@ -125,7 +156,7 @@ public class FotoController {
 	}
 	
 	@GetMapping("/foto/delete/{id}")
-	public String deletePizza(@PathVariable int id
+	public String deleteFoto(@PathVariable int id
 		) {
 		
 		Optional<Foto> optFoto = fotoService.findById(id);

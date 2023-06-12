@@ -43,6 +43,13 @@
 						<option th:value="false" th:selected="*{visibile} == false" >No</option>  
 					</select>
 				  </div>
+				  <select class="form-select" name="user" hidden>
+					<option th:each="user : ${users}" th:object="${user}" 
+						th:selected="${foto.user.id} == *{id}" 
+						th:value="*{id}">
+						[[ *{id} ]]
+					</option>
+				</select>
 				  <div class="mb-3">
 				    <label class="form-label">Categorie</label>
 				    <div th:each="categoria : ${categorie}" th:object="${categoria}">

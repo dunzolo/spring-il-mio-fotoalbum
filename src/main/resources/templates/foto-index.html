@@ -9,9 +9,14 @@
 <body>
 	<div class="container mt-5">
 		<div class="row border border-dark pt-5 pb-5">
+			<div class="d-flex justify-content-around">
+				<a href="/logout">LOGOUT</a>
+				<div>Username: <span sec:authentication="name"></span></div>
+			</div>
 			<h1 class="text-center">Le foto del web</h1>
 			<div class="col d-flex align-items-center justify-content-center my-3">
-				<a class="btn btn-primary" th:href="@{/foto/create}">Aggiungi nuova pizza</a>
+				<a class="btn btn-primary me-3" th:href="@{/foto/create}">Aggiungi nuova foto</a>
+				<a class="btn btn-secondary" th:href="@{/categorie}">Vai a categorie</a>
 			</div>
 			<form class="d-flex align-items-center justify-content-center" th:action="@{/foto/titolo}" method="POST">
 				<label>Titolo della foto</label>
@@ -27,9 +32,9 @@
 				    	<span class="badge bg-primary me-1" th:each="categoria : *{categorie}" th:object="${categoria}">[[ *{nome} ]]</span>
 				    </div>
 				    <div class="mt-3">
-					    <a th:href="@{/foto/{id} (id=*{id})}" class="btn btn-square btn-primary"><i class="fa-solid fa-eye"></i></a>
+					    <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/foto/{id} (id=*{id})}" class="btn btn-square btn-primary"><i class="fa-solid fa-eye"></i></a>
 					    <a th:href="@{/foto/edit/{id} (id=*{id})}" class="btn btn-square btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
-					    <a th:href="@{/foto/delete/{id} (id=*{id})}" class="btn btn-square btn-danger"><i class="fa-solid fa-trash"></i></a>
+					    <a sec:authorize="hasAuthority('ADMIN')"th:href="@{/foto/delete/{id} (id=*{id})}" class="btn btn-square btn-danger"><i class="fa-solid fa-trash"></i></a>
 				    </div>
 				  </div>
 				</div>
