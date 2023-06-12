@@ -2,6 +2,10 @@ package org.java.project.pojo;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +23,7 @@ public class Categoria {
 	private String nome;
 	
 	@ManyToMany(mappedBy = "categoria")
+	@JsonBackReference
 	private List<Foto> foto;
 	
 	public Categoria() {}
@@ -39,10 +44,10 @@ public class Categoria {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public List<Foto> getFotos() {
+	public List<Foto> getFoto() {
 		return foto;
 	}
-	public void setFotos(List<Foto> foto) {
+	public void setFoto(List<Foto> foto) {
 		this.foto = foto;
 	}
 	

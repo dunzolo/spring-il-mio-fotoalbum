@@ -97,7 +97,7 @@ public class CategoriaController {
 		Optional<Categoria> optCategoria = categoriaService.findById(id);
 		Categoria categoria = optCategoria.get();
 		
-		for(Foto foto : categoria.getFotos()) {
+		for(Foto foto : categoria.getFoto()) {
 			foto.removeCategoria(categoria);
 			fotoService.save(foto);
 		}

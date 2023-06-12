@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.java.project.auth.pojo.User;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +20,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
+@JsonIdentityInfo(
+	    generator = ObjectIdGenerators.PropertyGenerator.class,
+	    property = "id"
+	)
 public class Foto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +42,6 @@ public class Foto {
 	
 	@ManyToOne
 	@JoinColumn(nullable = false)
-	@JsonIgnore
 	private User user;
 	
 	public Foto() {}
