@@ -60,10 +60,20 @@ public class FotoController {
 	@PostMapping("/foto/titolo")
 	public String getBookByTitle(Model model, @RequestParam(required = false) String titolo) {
 		
-		List<Foto> fotoList = fotoService.findByTitolo(titolo);
-		
-		model.addAttribute("fotoList", fotoList);
-		model.addAttribute("titolo", titolo);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        
+        if(authentication.getAuthorities().stream()
+	            .anyMatch(role -> role.getAuthority().equals("ADMIN"))) {
+        	
+			List<Foto> fotoList = fotoService.findByTitoloAndUserId(titolo, user.getId());
+	    	model.addAttribute("fotoList", fotoList);
+		}
+		else {
+			List<Foto> fotoList = fotoService.findByTitolo(titolo);
+			model.addAttribute("fotoList", fotoList);
+			
+		}
 		
 		return "foto-index";
 	}

@@ -32,6 +32,10 @@ public class FotoService {
 		
 		return fotoRepo.findByTitoloContaining(titolo);
 	}
+	public List<Foto> findByTitoloAndUserId(String titolo, int id) {
+		
+		return fotoRepo.findByTitoloContainingAndUserId(titolo, id);
+	}
 	public void delete(Foto foto) {
 		
 		fotoRepo.delete(foto);
