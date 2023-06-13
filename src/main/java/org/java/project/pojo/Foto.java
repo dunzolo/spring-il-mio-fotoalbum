@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.java.project.auth.pojo.User;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
